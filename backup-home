@@ -1,0 +1,17 @@
+OLD_SNAPSHOT=`ls -d /.home-*|sort|tail -n 1`
+NEW_SNAPSHOT=`date -I`
+
+echo "old: $OLD_SNAPSHOT"
+echo "new: /.home-$NEW_SNAPSHOT"
+
+btrfs subvolume snapshot -r /home /.home-$NEW_SNAPSHOT &&\
+mount -L backup-dexhome-home /mnt/backup-home/ -o compress=zlib &&\
+btrfs send -p $OLD_SNAPSHOT /.home-$NEW_SNAPSHOT/ | mbuffer -m 16M | btrfs receive /mnt/backup-home/ &&\
+btrfs scrub start -B /mnt/backup-home/ \
+|| ( echo FAIL; umount /mnt/backup-home; beep -l 250 -f 349.2 -n -l 250 -f 261.6 -n -l 250 -f 349.2 -n -l 250 -f 261.6 -n -l 250 -f 349.2; exit 1)
+
+btrfs filesystem df /mnt/backup-home/
+btrfs quota enable /mnt/backup-home/; btrfs quota rescan -w /mnt/backup-home/; btrfs qgroup show /mnt/backup-home/
+umount /mnt/backup-home
+beep -l 50 -f 6000 -D 250 -n -l 50 -f 6000 -D 250 -n -l 50 -f 6000
+
