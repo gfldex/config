@@ -1,0 +1,13 @@
+# this is the global screenrc file. Handle with care.
+
+termcapinfo xterm* G0:is=\E[?3;4l\E>
+termcapinfo linux me=\E[m:AX
+
+autodetach on
+scrollback 10000
+escape ^yy
+
+bindkey ^K exec .! digraphs
+
+backtick 1 60 1 last-mail-sender.sh
+hardstatus alwayslastline "%{= wk}| %H | %l%{-} | %D %M %d %C | %t (%n)%{-} | %1`"
