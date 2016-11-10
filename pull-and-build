@@ -1,0 +1,3 @@
+#! /bin/sh
+
+test `git-check-remote` -gt 0 && (git pull; perl Configure.pl --gen-moar --backends=moar && make -j2 && make test install; beep -f 5000 -l 40 -d 50 -r 3)
