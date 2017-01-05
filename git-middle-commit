@@ -1,0 +1,1 @@
+git log --pretty=oneline $1..$2 | tail -n $[`git log --pretty=oneline $1..$2|wc -l` / 2] | head -n 1
