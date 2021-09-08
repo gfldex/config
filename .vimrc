@@ -106,32 +106,59 @@ set number
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 list
 set autoindent
 
-set listchars=eol:¶ 
+set listchars=eol:¶
 
-set <F5>=OT
-set <F6>=OU
-set <F7>=OV
-set <F8>=OW
-set <F9>=OX
-set <F10>=OY
-set <F11>=OZ
-set <F12>=O[
+set <F1>=[11~
+set <F2>=[12~
+set <F3>=[13~
+set <F4>=[14~
+set <F5>=[15~
+set <F6>=[17~
+set <F7>=[18~
+set <F8>=[19~
+set <F9>=[20~
+set <F10>=[21~
+set <F11>=[23~
+set <F12>=[24~
 
-nmap <F1> :w<CR>:!perl6 -I ./lib %<CR>
-imap <F1> <esc>:w<CR>:!perl6 -I ./lib %<CR>
+nmap <F1> :w<CR>:!raku -I ./lib %<CR>
+imap <F1> <esc>:w<CR>:!raku --ll-exception -I ./lib %<CR>
 nmap <F2> :w<CR>:!make test<CR>
 imap <F2> <esc>:w<CR>:!make test<CR>
-nmap <F3> :new<CR>:0read ! perl6 #<CR>:wincmd j<CR>
+nmap <F3> :new<CR>:0read ! raku #<CR>:wincmd j<CR>
 
 nmap <F5> :!git commit %<CR>
-nmap <F6> :!git push<CR>
+nmap <F6> :!make push<CR>
 nmap <F7> :!git diff %<CR>
 
+function! ListCharToggle()
+    if &listchars == "eol:¶"
+        set listchars=
+    else
+        set listchars=eol:¶
+    endif
+endfunction
+
+nmap <F9> :set number!<CR>:call ListCharToggle()<CR>
 
 map <C-H> :wincmd h<CR>
 map <C-J> :wincmd j<CR>
 map <C-K> :wincmd k<CR>
 map <C-L> :wincmd l<CR>
+
+nnoremap <Esc>1 1gt
+nnoremap <Esc>2 2gt
+nnoremap <Esc>3 3gt
+nnoremap <Esc>4 4gt
+nnoremap <Esc>5 5gt
+nnoremap <Esc>6 6gt
+nnoremap <Esc>7 7gt
+nnoremap <Esc>8 8gt
+nnoremap <Esc>9 9gt
+nnoremap <Esc>0 10gt
+nnoremap <Esc>[C gt
+nnoremap <Esc>[D gT
+
 
 syntax off
 
@@ -141,3 +168,13 @@ syntax off
 
 nnoremap <silent> gw "_yiw:s/\(\%#\S\+\)\(\s\+\)\(\S\+\)/\3\2\1/<CR><c-o><c-l>:nohlsearch<CR>
 
+set colorcolumn=80
+set t_Co=256
+
+"airline statusbar
+set laststatus=2
+set ttimeoutlen=50
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='luna'
+
+autocmd FileType rakudotest nmap <F1> :w<CR>:!./testcase %<CR>
