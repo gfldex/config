@@ -178,3 +178,34 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme='luna'
 
 autocmd FileType rakudotest nmap <F1> :w<CR>:!./testcase %<CR>
+
+function! s:swap_lines(n1, n2)
+    let line1 = getline(a:n1)
+    let line2 = getline(a:n2)
+    call setline(a:n1, line2)
+    call setline(a:n2, line1)
+endfunction
+
+function! s:swap_up()
+    let n = line('.')
+    if n == 1
+        return
+    endif
+
+    call s:swap_lines(n, n - 1)
+    exec n - 1
+endfunction
+
+function! s:swap_down()
+    let n = line('.')
+    if n == line('$')
+"        return
+        call append('$', '')
+    endif
+
+    call s:swap_lines(n, n + 1)
+    exec n + 1
+endfunction
+
+noremap <silent> <C-S><up> :call <SID>swap_up()<CR>
+noremap <silent> <C-S><down> :call <SID>swap_down()<CR>
